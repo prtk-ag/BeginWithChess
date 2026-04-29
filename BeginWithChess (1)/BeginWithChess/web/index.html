@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeginWithChess — 3D Coaching Engine</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inconsolata:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/build/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- ── LEFT: 3D BOARD ─────────────────────────────────────── -->
+    <main id="stage">
+      <div id="canvas-host"></div>
+
+      <!-- Floating controls overlay -->
+      <div id="board-overlay">
+        <div class="overlay-row">
+          <button class="ctrl" id="btn-flip" title="Flip board">⟲ Flip</button>
+          <button class="ctrl" id="btn-undo" title="Undo last move">↶ Undo</button>
+          <button class="ctrl" id="btn-new" title="Start new game">＋ New</button>
+        </div>
+        <div class="overlay-row meta-row">
+          <span class="meta-label">Turn</span>
+          <span class="turn-pill" id="turn-pill">White</span>
+        </div>
+      </div>
+
+      <!-- Connection status badge -->
+      <div id="conn-badge" class="badge offline">connecting…</div>
+
+      <!-- Game-over modal -->
+      <div id="modal" class="modal hidden">
+        <div class="modal-card">
+          <h2 id="modal-title">Checkmate</h2>
+          <p id="modal-msg">White wins.</p>
+          <button class="primary" id="modal-new">Start a new game</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ── RIGHT: COACH / CONTROLS ───────────────────────────── -->
+    <aside id="sidebar">
+      <header class="brand">
+        <div class="logo">♛</div>
+        <div class="title">
+          <h1>BeginWithChess</h1>
+          <p>A coaching engine</p>
+        </div>
+      </header>
+
+      <!-- Eval bar -->
+      <section class="card eval-card">
+        <div class="card-label">
+          <span>Evaluation</span>
+          <span class="card-value" id="eval-value">0.0</span>
+        </div>
+        <div class="eval-bar">
+          <div class="eval-fill" id="eval-fill" style="height:50%"></div>
+          <div class="eval-mid"></div>
+        </div>
+      </section>
+
+      <!-- Coach -->
+      <section class="card coach-card">
+        <div class="card-label">
+          <span>Coach</span>
+          <span class="card-tag" id="coach-tag">ready</span>
+        </div>
+        <div class="coach-body">
+          <p class="coach-text" id="coach-text">Make your first move. I'll explain what's happening and flag any blunders.</p>
+        </div>
+      </section>
+
+      <!-- Difficulty + side -->
+      <section class="card settings-card">
+        <div class="setting">
+          <label>Difficulty</label>
+          <div class="seg" role="tablist" id="seg-diff">
+            <button data-val="2">Easy</button>
+            <button data-val="3" class="active">Normal</button>
+            <button data-val="4">Hard</button>
+            <button data-val="5">Expert</button>
+          </div>
+        </div>
+        <div class="setting">
+          <label>Play as</label>
+          <div class="seg" role="tablist" id="seg-side">
+            <button data-val="white" class="active">White</button>
+            <button data-val="black">Black</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Move history -->
+      <section class="card history-card">
+        <div class="card-label">
+          <span>Moves</span>
+          <span class="card-value mono" id="move-count">0</span>
+        </div>
+        <ol class="moves" id="moves"></ol>
+      </section>
+
+      <footer class="foot">
+        <span>C++ engine + Three.js</span>
+        <span class="dim">•</span>
+        <span class="dim">v3</span>
+      </footer>
+    </aside>
+  </div>
+
+  <!-- Promotion picker (shown when a pawn reaches the back rank) -->
+  <div id="promo" class="promo hidden">
+    <div class="promo-card">
+      <h3>Promote pawn</h3>
+      <div class="promo-row">
+        <button data-promo="q"><span class="glyph">♕</span><span>Queen</span></button>
+        <button data-promo="r"><span class="glyph">♖</span><span>Rook</span></button>
+        <button data-promo="b"><span class="glyph">♗</span><span>Bishop</span></button>
+        <button data-promo="n"><span class="glyph">♘</span><span>Knight</span></button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
